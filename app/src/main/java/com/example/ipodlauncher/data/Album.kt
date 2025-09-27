@@ -1,0 +1,10 @@
+package com.example.ipodlauncher.data
+
+import android.net.Uri
+
+data class Album(
+    val id: Long,
+    val title: String,
+    val artist: String,
+    val albumArtUri: Uri?
+)
