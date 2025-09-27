@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.example.ipodlauncher.app-merged_res-55:/xml_provider_paths.xml.flat",
+        "source": "com.example.ipodlauncher.app-main-57:/xml/provider_paths.xml"
+    },
+    {
+        "merged": "com.example.ipodlauncher.app-merged_res-55:/raw_click.mp3.flat",
+        "source": "com.example.ipodlauncher.app-main-57:/raw/click.mp3"
+    }
+]
