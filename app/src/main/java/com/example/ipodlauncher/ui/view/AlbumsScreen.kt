@@ -15,6 +15,9 @@ fun AlbumsScreen(navController: NavController) {
         navController = navController,
         title = "Albums",
         items = albums,
-        itemText = { it.title }
+        itemText = { it.title },
+        onItemClick = { album ->
+            navController.navigate("albumSongs/${album.id}")
+        }
     )
 }

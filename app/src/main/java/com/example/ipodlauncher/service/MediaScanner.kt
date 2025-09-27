@@ -124,6 +124,104 @@ class MediaScanner(private val context: Context) {
         return artistsList
     }
 
+    fun getSongsByArtist(artistId: Long): List<Song> {
+        val musicList = mutableListOf<Song>()
+        val projection = arrayOf(
+            MediaStore.Audio.Media._ID,
+            MediaStore.Audio.Media.TITLE,
+            MediaStore.Audio.Media.ARTIST,
+            MediaStore.Audio.Media.ALBUM,
+            MediaStore.Audio.Media.DURATION,
+            MediaStore.Audio.Media.DATA,
+            MediaStore.Audio.Media.ALBUM_ID,
+            MediaStore.Audio.Media.ARTIST_ID
+        )
+
+        val selection = "${MediaStore.Audio.Media.IS_MUSIC} != 0 AND ${MediaStore.Audio.Media.ARTIST_ID} = ?"
+
+        context.contentResolver.query(
+            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+            projection,
+            selection,
+            arrayOf(artistId.toString()),
+            null
+        )?.use { cursor ->
+            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
+            val titleColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)
+            val artistColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)
+            val albumColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM)
+            val durationColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
+            val dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+            val albumIdColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)
+            val artistIdColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST_ID)
+
+            while (cursor.moveToNext()) {
+                val id = cursor.getLong(idColumn)
+                val title = cursor.getString(titleColumn)
+                val artist = cursor.getString(artistColumn)
+                val album = cursor.getString(albumColumn)
+                val duration = cursor.getLong(durationColumn)
+                val path = cursor.getString(dataColumn)
+                val albumId = cursor.getLong(albumIdColumn)
+                val artistId = cursor.getLong(artistIdColumn)
+
+                val albumArtUri = getAlbumArtUri(albumId)
+
+                musicList.add(Song(id, title, artist, album, duration, path, albumArtUri, albumId, artistId))
+            }
+        }
+        return musicList
+    }
+
+    fun getSongsByAlbum(albumId: Long): List<Song> {
+        val musicList = mutableListOf<Song>()
+        val projection = arrayOf(
+            MediaStore.Audio.Media._ID,
+            MediaStore.Audio.Media.TITLE,
+            MediaStore.Audio.Media.ARTIST,
+            MediaStore.Audio.Media.ALBUM,
+            MediaStore.Audio.Media.DURATION,
+            MediaStore.Audio.Media.DATA,
+            MediaStore.Audio.Media.ALBUM_ID,
+            MediaStore.Audio.Media.ARTIST_ID
+        )
+
+        val selection = "${MediaStore.Audio.Media.IS_MUSIC} != 0 AND ${MediaStore.Audio.Media.ALBUM_ID} = ?"
+
+        context.contentResolver.query(
+            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+            projection,
+            selection,
+            arrayOf(albumId.toString()),
+            null
+        )?.use { cursor ->
+            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
+            val titleColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)
+            val artistColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)
+            val albumColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM)
+            val durationColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
+            val dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+            val albumIdColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM_ID)
+            val artistIdColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST_ID)
+
+            while (cursor.moveToNext()) {
+                val id = cursor.getLong(idColumn)
+                val title = cursor.getString(titleColumn)
+                val artist = cursor.getString(artistColumn)
+                val album = cursor.getString(albumColumn)
+                val duration = cursor.getLong(durationColumn)
+                val path = cursor.getString(dataColumn)
+                val albumId = cursor.getLong(albumIdColumn)
+                val artistId = cursor.getLong(artistIdColumn)
+
+                val albumArtUri = getAlbumArtUri(albumId)
+
+                musicList.add(Song(id, title, artist, album, duration, path, albumArtUri, albumId, artistId))
+            }
+        }
+        return musicList
+    }
+
     fun getPhotos(): List<com.example.ipodlauncher.data.Photo> {
         val photoList = mutableListOf<com.example.ipodlauncher.data.Photo>()
         val projection = arrayOf(

@@ -20,7 +20,25 @@ fun NavGraph() {
         composable("apps") { AppDrawerScreen(navController = navController) }
         composable("music") { MusicScreen(navController = navController) }
         composable("artists") { ArtistsScreen(navController = navController) }
+        composable(
+            "artistSongs/{artistId}",
+            arguments = listOf(navArgument("artistId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val artistId = backStackEntry.arguments?.getLong("artistId")
+            if (artistId != null) {
+                ArtistSongsScreen(navController = navController, artistId = artistId)
+            }
+        }
         composable("albums") { AlbumsScreen(navController = navController) }
+        composable(
+            "albumSongs/{albumId}",
+            arguments = listOf(navArgument("albumId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val albumId = backStackEntry.arguments?.getLong("albumId")
+            if (albumId != null) {
+                AlbumSongsScreen(navController = navController, albumId = albumId)
+            }
+        }
         composable("songs") { SongsScreen(navController = navController) }
         composable("photos") { PhotosScreen(navController = navController) }
         composable("videos") { VideosScreen(navController = navController) }

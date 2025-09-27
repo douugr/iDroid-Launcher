@@ -15,6 +15,9 @@ fun ArtistsScreen(navController: NavController) {
         navController = navController,
         title = "Artists",
         items = artists,
-        itemText = { it.name }
+        itemText = { it.name },
+        onItemClick = { artist ->
+            navController.navigate("artistSongs/${artist.id}")
+        }
     )
 }
