@@ -4,8 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,11 +19,13 @@ import com.example.ipodlauncher.data.Photo
 fun SelectableGrid(
     modifier: Modifier = Modifier,
     items: List<Photo>,
-    selectedItemIndex: Int
+    selectedItemIndex: Int,
+    gridState: LazyGridState = rememberLazyGridState()
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
-        modifier = modifier
+        modifier = modifier,
+        state = gridState
     ) {
         itemsIndexed(items) { index, item ->
             val backgroundColor = if (index == selectedItemIndex) Color.Blue else Color.Transparent

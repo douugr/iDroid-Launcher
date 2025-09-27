@@ -1,7 +1,15 @@
 package com.example.ipodlauncher.ui.view
 
-import androidx.compose.runtime.*
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 
 @Composable
 fun <T> BaseListScreen(
@@ -13,6 +21,8 @@ fun <T> BaseListScreen(
 ) {
     var scrollValue by remember { mutableStateOf(0f) }
     var selectedItemIndex by remember { mutableStateOf(0) }
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
     BaseScreen(
         navController = navController,
@@ -33,11 +43,17 @@ fun <T> BaseListScreen(
             }
         }
     ) { modifier ->
+        LaunchedEffect(selectedItemIndex) {
+            coroutineScope.launch {
+                listState.animateScrollToItem(selectedItemIndex)
+            }
+        }
         SelectableList(
             modifier = modifier,
             items = items,
             selectedItemIndex = selectedItemIndex,
-            itemText = itemText
+            itemText = itemText,
+            listState = listState
         )
     }
 }

@@ -35,22 +35,31 @@ fun ClickWheel(
     val context = androidx.compose.ui.platform.LocalContext.current
     val mediaPlayer = remember { MediaPlayer.create(context, R.raw.click) }
     val haptic = LocalHapticFeedback.current
+    var lastDirection by remember { mutableStateOf(-1) }
+    val directions = (0..7).map { it * 45f }
 
     Box(
         modifier = modifier
             .size(200.dp)
             .background(Color.Gray, shape = CircleShape)
             .pointerInput(Unit) {
-                detectDragGestures { change, dragAmount ->
+                detectDragGestures {
+                    change, dragAmount ->
                     change.consume()
                     val x = change.position.x - size.width / 2
                     val y = change.position.y - size.height / 2
-                    val newAngle = atan2(y, x) * (180f / Math.PI).toFloat()
+                    val newAngle = (atan2(y, x) * (180f / Math.PI).toFloat() + 360) % 360
+
+                    val currentDirection = directions.minByOrNull { kotlin.math.abs(it - newAngle) }?.let { directions.indexOf(it) } ?: -1
+
+                    if (currentDirection != lastDirection) {
+                        mediaPlayer?.start()
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                        lastDirection = currentDirection
+                    }
 
                     val angleDiff = newAngle - angle
                     onScroll(angleDiff)
-                    mediaPlayer?.start()
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
 
                     angle = newAngle
                 }

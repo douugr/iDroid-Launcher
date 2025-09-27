@@ -7,7 +7,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
 import androidx.navigation.NavController
 import com.example.ipodlauncher.data.Document
-import java.util.Locale
 
 @Composable
 fun DownloadsScreen(navController: NavController) {
